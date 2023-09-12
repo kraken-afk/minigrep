@@ -10,6 +10,7 @@ pub struct Config {
 
 impl Config {
   pub fn build(args: Vec<String>) -> Result<Config, &'static str> {
+    let mut args: Vec<String> = args;
 
     if args.len() < 3 {
       return Err("Not enough arguments")
@@ -17,6 +18,9 @@ impl Config {
 
     if args.contains(&CASE_INSENSITIVE_FLAG.to_string()) {
       std::env::set_var("IGNORE_CASE", "1");
+      if let Some(i) = args.iter().position(|s| s == &CASE_INSENSITIVE_FLAG.to_string()) {
+        args.remove(i);
+      }
     }
 
     let config: Config = Config {
